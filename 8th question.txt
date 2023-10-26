@@ -1,0 +1,54 @@
+1.SELECT DISTINCT p.Name
+FROM Physician p
+JOIN Trained_In t ON p.EmployeeID = t.Physician
+JOIN Procedures pr ON t.Treatment = pr.Code
+WHERE pr.Code NOT IN (SELECT t2.Treatment FROM Trained_In t2 WHERE t2.Physician = p.EmployeeID);
+
+2.SELECT
+    p.Name AS PhysicianName,
+    pr.Name AS ProcedureName,
+    u.DateUndergoes AS ProcedureDate,
+    pa.Name AS PatientName
+FROM Physician p
+JOIN Undergoes u ON p.EmployeeID = u.Physician
+JOIN Procedures pr ON u.Procedures = pr.Code
+JOIN Patient pa ON u.Patient = pa.SSN
+WHERE pr.Code NOT IN (SELECT t2.Treatment FROM Trained_In t2 WHERE t2.Physician = p.EmployeeID);
+
+3.SELECT DISTINCT p.Name
+FROM Physician p
+JOIN Trained_In t ON p.EmployeeID = t.Physician
+JOIN Procedures pr ON t.Treatment = pr.Code
+JOIN Undergoes u ON p.EmployeeID = u.Physician AND pr.Code = u.Procedures
+WHERE u.DateUndergoes > t.CertificationExpires;
+
+4.SELECT
+    p.Name AS PhysicianName,
+    pr.Name AS ProcedureName,
+    u.DateUndergoes AS ProcedureDate,
+    pa.Name AS PatientName,
+    t.CertificationExpires AS CertificationExpirationDate
+FROM Physician p
+JOIN Trained_In t ON p.EmployeeID = t.Physician
+JOIN Procedures pr ON t.Treatment = pr.Code
+JOIN Undergoes u ON p.EmployeeID = u.Physician AND pr.Code = u.Procedures
+JOIN Patient pa ON u.Patient = pa.SSN
+WHERE u.DateUndergoes > t.CertificationExpires;
+
+
+
+6.SELECT *
+FROM Undergoes u
+LEFT JOIN Stay s ON u.Stay = s.StayID
+WHERE u.Patient <> s.Patient;
+
+7.SELECT DISTINCT n.Name
+FROM Nurse n
+JOIN On_Call oc ON n.EmployeeID = oc.Nurse
+WHERE oc.BlockFloor = 1 AND oc.BlockCode = 2;
+
+
+8.SELECT ExaminationRoom, COUNT(*) AS NumAppointments
+FROM Appointment
+GROUP BY ExaminationRoom;
+
